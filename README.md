@@ -3,6 +3,7 @@
 ## Description
 
 This repository is a simple PHP MVC structure from scratch implementing a cruddable `Item` resource.
+It holds the demo app' built for this dev.to article => <https://dev.to/yactouat/a-gentle-introduction-to-client-side-data-fetching-and-rendering-3h4n>.
 
 ## Steps
 
