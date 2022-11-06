@@ -61,8 +61,16 @@ class ItemController extends AbstractController
     public function add(): ?string
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            // clean $_POST data
-            $item = array_map('trim', $_POST);
+
+            // transforming request input into JSON
+            // note: adding `true` as a 2nd param to the `json_decode` function allows us to get an associative array
+            $itemJSON = json_decode(file_get_contents('php://input'), true);
+
+            // TODO failure behavior case JSON was not parsed correctly
+
+            // this time, we dont clean $_POST but our JSON's data
+            // $item = array_map('trim', $_POST);
+            $item = array_map('trim', $itemJSON);
 
             // TODO validations (length, format...)
 

@@ -24,12 +24,31 @@
             // we prevent the page from reloading
             e.preventDefault();
             // we prepare the item payload to send to the backend as a string
-            const itemPayload = JSON.stringify({
+            const itemPayload = {
                 title: document.querySelector('#add_item_form input[name="title"]').value
+            };
+            // we send our item payload to the correct URL
+            fetch('/items/add', {
+                // we specify the request method
+                method: 'POST',
+                // we say to the server that we are sending JSON
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                // we set the body of our HTTP request to be the item payload
+                body: JSON.stringify(itemPayload),
+            })
+                // on receiving the response from the server, we turn it into a readable json
+                .then((response) => response.json())
+                // ...then we do whatever we want with the response on the client side 
+                .then((data) => {
+                    console.log('Success:', data);
+                })
+                // ...OR we implement an error a behavior in case our HTTP call did not succeed or transforming the response into JSON failed
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
             });
-            // we test that we do intercept the `submit` event and retrieve the user input successfully
-            alert(itemPayload);
-        });
 
     });
 </script>
