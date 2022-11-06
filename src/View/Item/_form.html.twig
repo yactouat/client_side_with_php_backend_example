@@ -1,8 +1,17 @@
 {# TODO : manage errors display #}
 
-<form method="post" action="/items/add">
-	<input type="hidden" value="{{ item.id }}" name="id">
-	<label for="title">Tile</label>
-	<input type="text" value="{{ item.title }}" name="title" id="title">
-	<button>Add an item</button>
-</form>
+{% if item.id is not defined %}
+	<form method="post" action="/items/add" id="add_item_form">
+		<label for="add_item_form_title">Tile</label>
+		<input type="text" value="{{ item.title }}" name="title" id="add_item_form_title">
+		<button>Add an item</button>
+	</form>
+{% else %}
+	<form method="post" action="/items/edit?id={{ item.id }}" id="edit_item_form">
+		<input type="hidden" value="{{ item.id }}" name="id">
+		<label for="edit_item_form_title">Tile</label>
+		<input type="text" value="{{ item.title }}" name="title" id="edit_item_form_title">
+		<button>Edit an item</button>
+	</form>
+{% endif %}
+

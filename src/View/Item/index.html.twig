@@ -11,3 +11,26 @@
         {% endfor %}
     </ul>
 {% endblock %}
+
+{% block javascript %}
+<script>
+    // we wait that our HTML markup is fully loaded before interacting with the DOM
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // we get the form element
+        const addItemForm = document.getElementById('add_item_form');
+        // we listen to its `submit` event
+        addItemForm.addEventListener('submit', e => {
+            // we prevent the page from reloading
+            e.preventDefault();
+            // we prepare the item payload to send to the backend as a string
+            const itemPayload = JSON.stringify({
+                title: document.querySelector('#add_item_form input[name="title"]').value
+            });
+            // we test that we do intercept the `submit` event and retrieve the user input successfully
+            alert(itemPayload);
+        });
+
+    });
+</script>
+{% endblock %}
