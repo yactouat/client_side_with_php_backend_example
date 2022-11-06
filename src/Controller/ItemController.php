@@ -62,17 +62,26 @@ class ItemController extends AbstractController
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-            var_dump($_POST); var_dump($_FILES); die();
-
-            // transforming request input into JSON
+            // getting request input from JSON or `$_POST` array
             // note: adding `true` as a 2nd param to the `json_decode` function allows us to get an associative array
-            $itemJSON = json_decode(file_get_contents('php://input'), true);
-
             // TODO failure behavior case JSON was not parsed correctly
+            $itemPayload = count($_POST) <= 0 ? json_decode(file_get_contents('php://input'), true)
+                : $_POST;
+
+            // proceeding with file upload if there is a file
+            if (count($_FILES) > 0) {
+                // choosing a place where to store uploaded files
+                $targetDir = "/var/www/public/uploads/";
+                $fileName = basename($_FILES["image_url"]["name"]);
+                $targetFilePath = $targetDir . $fileName;
+                // TODO file validations (size, extension, file name length ...)
+                // TODO behavior if file already exists
+                move_uploaded_file($_FILES["image_url"]["tmp_name"], $targetFilePath);
+            }
 
             // this time, we dont clean $_POST but our JSON's data
             // $item = array_map('trim', $_POST);
-            $item = array_map('trim', $itemJSON);
+            $item = array_map('trim', $itemPayload);
 
             // TODO validations (length, format...)
 
