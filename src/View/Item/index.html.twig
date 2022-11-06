@@ -3,7 +3,8 @@
 {% block content %}
     {% include "Item/_form.html.twig" %}
     <h1>Items</h1>
-    <ul>
+    {# we give our UL an id so we can select it easily with JS #}
+    <ul id="items_list">
         {% for item in items %}
             <li><a href="/items/show?id={{ item.id }}">{{ item.id }}. {{ item.title }}</a></li>
         {% else %}
@@ -42,7 +43,12 @@
                 .then((response) => response.json())
                 // ...then we do whatever we want with the response on the client side 
                 .then((data) => {
-                    console.log('Success:', data);
+                    // we create a `li` that will hold our newly retrieved item
+                    const itemEl = document.createElement('li');
+                    // we fill this list item with the correct link
+                    itemEl.innerHTML = `<a href="/items/show?id=${data.id}">${data.id}. ${data.title}</a>`;
+                    // we update the DOM
+                    document.getElementById('items_list').appendChild(itemEl);
                 })
                 // ...OR we implement an error a behavior in case our HTTP call did not succeed or transforming the response into JSON failed
                 .catch((error) => {

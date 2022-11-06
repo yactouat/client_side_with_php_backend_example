@@ -78,8 +78,10 @@ class ItemController extends AbstractController
             $itemManager = new ItemManager();
             $id = $itemManager->insert($item);
 
-            header('Location:/items/show?id=' . $id);
-            return null;
+            // header('Location:/items/show?id=' . $id);
+            // return null;
+            // we dont redirect and we dont return null but we return a stringified item instead
+            return json_encode($itemManager->selectOneById($id));
         }
 
         return $this->twig->render('Item/add.html.twig');
