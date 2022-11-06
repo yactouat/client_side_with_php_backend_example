@@ -6,7 +6,12 @@
     {# we give our UL an id so we can select it easily with JS #}
     <ul id="items_list">
         {% for item in items %}
-            <li><a href="/items/show?id={{ item.id }}">{{ item.id }}. {{ item.title }}</a></li>
+            <li>
+                <a href="/items/show?id={{ item.id }}">{{ item.id }}. {{ item.title }}</a>
+                {% if item.image_url is not empty %}
+                    <img src="{{item.image_url}}" alt="{{item.title}} associated image">
+                {% endif %}
+            </li>
         {% else %}
             <li>Nothing to display</li>
         {% endfor %}
