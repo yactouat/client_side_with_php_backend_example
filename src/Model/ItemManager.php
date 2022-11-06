@@ -13,9 +13,16 @@ class ItemManager extends AbstractManager
      */
     public function insert(array $item): int
     {
-        $statement = $this->pdo->prepare("INSERT INTO " . self::TABLE . " (`title`) VALUES (:title)");
+        $statement = $this->pdo->prepare(
+            "INSERT INTO " . self::TABLE . " (`title`, `image_url`) VALUES (:title, :image_url)"
+        );
         $statement->bindValue('title', $item['title'], PDO::PARAM_STR);
-
+        $statement->bindValue(
+            'image_url', 
+            // taking into account the fact that there can be no image
+            !empty($item['image_url']) ? $item['image_url'] : '', 
+            PDO::PARAM_STR
+        );
         $statement->execute();
         return (int)$this->pdo->lastInsertId();
     }

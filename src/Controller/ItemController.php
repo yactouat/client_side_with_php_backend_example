@@ -77,6 +77,8 @@ class ItemController extends AbstractController
                 // TODO file validations (size, extension, file name length ...)
                 // TODO behavior if file already exists
                 move_uploaded_file($_FILES["image_url"]["tmp_name"], $targetFilePath);
+                // adding the image url information to the item record to insert in db
+                $itemPayload['image_url'] = 'uploads/'.$fileName;
             }
 
             // this time, we dont clean $_POST but our JSON's data

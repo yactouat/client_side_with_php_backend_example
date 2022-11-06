@@ -27,6 +27,10 @@
         const itemEl = document.createElement('li');
         // we fill this list item with the correct link
         itemEl.innerHTML = `<a href="/items/show?id=${item.id}">${item.id}. ${item.title}</a>`;
+        // if there is an image url, we add the element to show it
+        if (item.image_url.trim().length > 0) {
+            itemEl.innerHTML += ` <img src="${item.image_url}" alt="${item.title} associated image">`;
+        }
         // we update the DOM
         document.getElementById('items_list').appendChild(itemEl);
     }
