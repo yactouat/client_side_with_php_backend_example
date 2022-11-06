@@ -20,6 +20,17 @@
 
 {% block javascript %}
 <script>
+
+    // factorizing updating the DOM with a new item in one place
+    const updateDomWithNewItem = (item) => {
+        // we create a `li` that will hold our newly retrieved item
+        const itemEl = document.createElement('li');
+        // we fill this list item with the correct link
+        itemEl.innerHTML = `<a href="/items/show?id=${item.id}">${item.id}. ${item.title}</a>`;
+        // we update the DOM
+        document.getElementById('items_list').appendChild(itemEl);
+    }
+
     // we wait that our HTML markup is fully loaded before interacting with the DOM
     document.addEventListener('DOMContentLoaded', () => {
 
@@ -29,37 +40,50 @@
         addItemForm.addEventListener('submit', e => {
             // we prevent the page from reloading
             e.preventDefault();
-            // we prepare the item payload to send to the backend as a string
-            const itemPayload = {
-                title: document.querySelector('#add_item_form input[name="title"]').value
-            };
-            // we send our item payload to the correct URL
-            fetch('/items/add', {
-                // we specify the request method
-                method: 'POST',
-                // we say to the server that we are sending JSON
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                // we set the body of our HTTP request to be the item payload
-                body: JSON.stringify(itemPayload),
-            })
-                // on receiving the response from the server, we turn it into a readable json
-                .then((response) => response.json())
-                // ...then we do whatever we want with the response on the client side 
-                .then((data) => {
-                    // we create a `li` that will hold our newly retrieved item
-                    const itemEl = document.createElement('li');
-                    // we fill this list item with the correct link
-                    itemEl.innerHTML = `<a href="/items/show?id=${data.id}">${data.id}. ${data.title}</a>`;
-                    // we update the DOM
-                    document.getElementById('items_list').appendChild(itemEl);
+            // getting the image title
+            const itemTitle = document.querySelector('#add_item_form input[name="title"]').value;
+            // getting the `image_url` input if any
+            const itemImage = document.getElementById('add_item_image_url').files;
+            // sending JSON in case there is no file
+            if (!itemImage || itemImage.length <= 0) {
+                // we prepare the item payload to send to the backend as a string
+                const itemPayload = {
+                    title: itemTitle
+                };
+                // we send our item payload to the correct URL
+                fetch('/items/add', {
+                    // we specify the request method
+                    method: 'POST',
+                    // we say to the server that we are sending JSON
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    // we set the body of our HTTP request to be the item payload
+                    body: JSON.stringify(itemPayload),
                 })
-                // ...OR we implement an error a behavior in case our HTTP call did not succeed or transforming the response into JSON failed
-                .catch((error) => {
-                    console.error('Error:', error);
-                });
-            });
+                    // on receiving the response from the server, we turn it into a readable json
+                    .then((response) => response.json())
+                    // ...then we do whatever we want with the response on the client side 
+                    .then((item) => updateDomWithNewItem(item))
+                    // ...OR we implement an error a behavior in case our HTTP call did not succeed or transforming the response into JSON failed
+                    .catch((error) => console.error('Error:', error));                
+            } else { // there is an input file so we send a `multipart/form-data` input
+                // we create a `FormData` object to construct our input
+                const fd = new FormData();
+                // we feed it with the user-selected image (index 0 because a file input can hold several files)
+                fd.append('image_url', itemImage[0]);
+                // we add the text input
+                fd.append('title', itemTitle);
+                // we send our POST request
+                fetch('/items/add', {
+                    method: 'POST',
+                    body: fd
+                })
+                    .then(response => response.json())
+                    .then((item) => updateDomWithNewItem(item))
+                    .catch((error) => console.error('Error:', error));
+            }
+        });
 
     });
 </script>

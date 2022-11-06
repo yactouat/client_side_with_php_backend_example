@@ -62,6 +62,8 @@ class ItemController extends AbstractController
     {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
+            var_dump($_POST); var_dump($_FILES); die();
+
             // transforming request input into JSON
             // note: adding `true` as a 2nd param to the `json_decode` function allows us to get an associative array
             $itemJSON = json_decode(file_get_contents('php://input'), true);

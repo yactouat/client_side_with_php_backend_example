@@ -2,8 +2,10 @@
 
 {% if item.id is not defined %}
 	<form method="post" action="/items/add" id="add_item_form">
-		<label for="add_item_form_title">Tile</label>
+		<label for="add_item_form_title">Title</label>
 		<input type="text" value="{{ item.title }}" name="title" id="add_item_form_title">
+		<label for="add_item_image_url">Image</label>
+		<input type="file" id="add_item_image_url" name="image_url">
 		<button>Add an item</button>
 	</form>
 {% else %}
