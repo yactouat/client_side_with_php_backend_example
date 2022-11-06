@@ -1,0 +1,23 @@
+{
+    "name": "yactouat/client_side_with_php_backend_example",
+    "description": "",
+    "authors": [
+        {
+            "name": "Yacine",
+            "email": "yacine.touati.pro@gmail.com"
+        }
+    ],
+    "minimum-stability": "stable",
+    "require": {
+        "ext-pdo": "*",
+        "twig/twig": "^3.4"
+    },
+    "require-dev": {
+        "filp/whoops": "^2.14"
+    },
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    }
+}

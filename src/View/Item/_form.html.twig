@@ -1,0 +1,8 @@
+{# TODO : manage errors display #}
+
+<form method="post" action="/items/add">
+	<input type="hidden" value="{{ item.id }}" name="id">
+	<label for="title">Tile</label>
+	<input type="text" value="{{ item.title }}" name="title" id="title">
+	<button>Add an item</button>
+</form>
